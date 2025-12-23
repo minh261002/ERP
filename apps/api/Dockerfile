@@ -5,14 +5,11 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
 # ---------- deps ----------
 FROM base AS deps
-COPY package.json pnpm-lock.yaml ./
-COPY apps/api/package.json apps/api/package.json
-COPY packages ./packages
+COPY . .
 RUN pnpm install --frozen-lockfile
 
 # ---------- build ----------
 FROM deps AS builder
-COPY . .
 WORKDIR /app/apps/api
 RUN pnpm build
 
@@ -22,6 +19,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY --from=builder /app/apps/api/dist ./dist
+COPY --from=builder /app/apps/api/prisma ./prisma
 COPY --from=builder /app/apps/api/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 
