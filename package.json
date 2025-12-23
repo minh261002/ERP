@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "ERP-SAAS",
   "private": true,
   "scripts": {
     "build": "turbo run build",
